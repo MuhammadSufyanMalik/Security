@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using System.Net;
+using Security.Extensions;
 
 namespace Security
 {
@@ -39,11 +40,12 @@ namespace Security
                 errors = ((ValidationException)e).Errors;
                 //httpContext.Response.StatusCode = 400;
 
-                return httpContext.Response.WriteAsync(new ValidationErrorDetails
+                var validationFailures = errors as ValidationFailure[] ?? errors.ToArray();
+                return httpContext.Response.WriteAsync(new ValidationErrorDetails(validationFailures)
                 {
                     StatusCode = 400,
                     Message = message,
-                    Errors = errors
+                    Errors = validationFailures
                 }.ToString());
             }
 

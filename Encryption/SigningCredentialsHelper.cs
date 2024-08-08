@@ -1,8 +1,8 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 
-namespace Security
+namespace Security.Encryption
 {
-    public class SigningCredentialsHelper
+    public abstract class SigningCredentialsHelper
     {
         public static SigningCredentials CreateSigningCredentials(SecurityKey securityKey)
         {

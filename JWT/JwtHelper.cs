@@ -1,23 +1,21 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Security.Encryption;
+using Security.Extensions;
 
-
-namespace Security
+namespace Security.JWT
 {
     public class JwtHelper : ITokenHelper
     {
-        public readonly IConfiguration Configuration;
-
-        private TokenOptions _tokenOptions;
+        private readonly TokenOptions _tokenOptions;
 
         private DateTime _accessTokenExpiration;
 
         public JwtHelper(IConfiguration configuration)
         {
-            Configuration = configuration;
-            _tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+            _tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>()!;
         }
         //public AccessToken CreateToken(User user, List<OperationClaim> operationClaims)
         //{
@@ -69,13 +67,13 @@ namespace Security
         {
             return new JwtSecurityToken(_tokenOptions.Issuer, _tokenOptions.Audience, expires: _accessTokenExpiration, notBefore: DateTime.Now, claims: SetClaims(userId, userName, email, fullName, userTypeId, refId, roller), signingCredentials: signingCredentials);
         }
-        private IEnumerable<Claim> SetClaims(string userId, string userName, string email, string adSoyad, string userTypeId, string refId, List<string> roles)
+        private IEnumerable<Claim> SetClaims(string userId, string userName, string email, string fullName, string userTypeId, string refId, List<string> roles)
         {
             List<Claim> list = new List<Claim>();
             list.AddRefId(refId);
             list.AddUserName(userName);
             list.AddEmail(email.ToString());
-            list.AddName(adSoyad);
+            list.AddName(fullName);
             list.AddNameIdentifier(userId);
             list.AddRoles(roles.ToArray());
             list.AddUserType(userTypeId);
