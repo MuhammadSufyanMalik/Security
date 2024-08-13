@@ -9,6 +9,11 @@
     <Company>MalikSoft</Company>
     <Description>Security Contains Encryption,Extensions,Hashing and JWT
 </Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
+    <AssemblyName>Security.JWT</AssemblyName>
+    <RootNamespace>Security.JWT</RootNamespace>
+    <PackageId>Security.JWT</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
